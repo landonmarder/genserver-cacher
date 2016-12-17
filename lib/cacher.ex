@@ -20,6 +20,10 @@ defmodule Cacher do
     GenServer.call(@name, {:delete_from_store, key})
   end
 
+  def clear do
+    GenServer.cast(@name, :clear_store)
+  end
+
   ## Server API
 
   def handle_call({:write_to_store, key, value}, _from, store) do
@@ -39,6 +43,10 @@ defmodule Cacher do
 
   def init(:ok) do
     {:ok, %{}}
+  end
+
+  def handle_cast(:clear_store, _store) do
+    {:noreply, %{}}
   end
 
   ## Helper Functions
