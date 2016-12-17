@@ -20,6 +20,10 @@ defmodule Cacher do
     GenServer.call(@name, {:delete_from_store, key})
   end
 
+  def exist?(key) do
+    GenServer.call(@name, {:check_if_key_exists, key})
+  end
+
   def clear do
     GenServer.cast(@name, :clear_store)
   end
@@ -37,6 +41,10 @@ defmodule Cacher do
 
   def handle_call({:delete_from_store, key}, _from, store) do
     {:reply, nil, Map.delete(store, key)}
+  end
+
+  def handle_call({:check_if_key_exists, key}, _from, store) do
+    {:reply, Map.has_key?(store, key), store}
   end
 
   ## Server Callbacks
