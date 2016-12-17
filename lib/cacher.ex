@@ -38,7 +38,7 @@ defmodule Cacher do
   defp update_store(store, key, value) do
     case Map.has_key?(store, key) do
       true ->
-        Map.update!(store, key, value)
+        Map.put(store, key, value)
       false ->
         Map.put_new(store, key, value)
     end
