@@ -12,12 +12,19 @@ defmodule Cacher do
     GenServer.call(@name, {:write_to_store, key, value})
   end
 
+  def read(key) do
+    GenServer.call(@name, {:read_from_store, key})
+  end
 
   ## Server API
 
   def handle_call({:write_to_store, key, value}, _from, store) do
     new_store = update_store(store, key, value)
-    {:reply, "#{key}: #{value}", new_store}
+    {:reply, new_store[key], new_store}
+  end
+
+  def handle_call({:read_from_store, key}, _from, store) do
+    {:reply, store[key], store}
   end
 
   ## Server Callbacks
