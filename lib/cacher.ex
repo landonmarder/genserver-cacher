@@ -28,6 +28,10 @@ defmodule Cacher do
     GenServer.cast(@name, :clear_store)
   end
 
+  def stop do
+    GenServer.cast(@name, :stop)
+  end
+
   ## Server API
 
   def handle_call({:write_to_store, key, value}, _from, store) do
@@ -55,6 +59,16 @@ defmodule Cacher do
 
   def handle_cast(:clear_store, _store) do
     {:noreply, %{}}
+  end
+
+  def handle_cast(:stop, store) do
+    {:stop, :normal, store}
+  end
+
+  def terminate(reason, store) do
+    IO.puts "server terminated because of #{inspect(reason)}"
+      inspect store
+    :ok
   end
 
   ## Helper Functions
